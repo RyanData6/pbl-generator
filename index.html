@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBL 教学资源生成器 - 面向高职本科数据科学类专业</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PBL 教学资源生成器</h1>
+            <p class="subtitle">面向高职本科数据科学类专业</p>
+        </header>
+
+        <main>
+            <section class="form-section">
+                <h2>课程信息</h2>
+                <form id="courseForm">
+                    <div class="form-group">
+                        <label for="courseName">课程名称 <span class="required">*</span></label>
+                        <input type="text" id="courseName" required placeholder="例如：Python数据分析">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="courseTopic">课程主题/章节 <span class="required">*</span></label>
+                        <input type="text" id="courseTopic" required placeholder="例如：数据清洗与预处理">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="major">专业方向</label>
+                            <select id="major">
+                                <option value="数据科学与大数据技术">数据科学与大数据技术</option>
+                                <option value="人工智能技术应用">人工智能技术应用</option>
+                                <option value="计算机应用技术（数据方向）">计算机应用技术（数据方向）</option>
+                                <option value="软件技术（数据方向）">软件技术（数据方向）</option>
+                                <option value="统计学（数据方向）">统计学（数据方向）</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="studentLevel">学生层次</label>
+                            <select id="studentLevel">
+                                <option value="高职本科（应用型本科）">高职本科（应用型本科）</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="classHours">计划课时</label>
+                            <input type="number" id="classHours" min="1" max="64" value="8">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="groupSize">小组人数</label>
+                            <input type="number" id="groupSize" min="2" max="8" value="4">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projectType">项目类型</label>
+                        <select id="projectType">
+                            <option value="数据分析实战项目">数据分析实战项目</option>
+                            <option value="数据可视化项目">数据可视化项目</option>
+                            <option value="机器学习应用项目">机器学习应用项目</option>
+                            <option value="数据库设计与开发项目">数据库设计与开发项目</option>
+                            <option value="数据采集与处理项目">数据采集与处理项目</option>
+                            <option value="综合数据科学项目">综合数据科学项目</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projectScenario">项目情境描述（可选）</label>
+                        <textarea id="projectScenario" rows="3" placeholder="描述一个真实的业务场景，例如：某电商企业需要对用户行为数据进行分析，以提升用户留存率..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="learningObjectives">学习目标（可选，不填则由AI自动生成）</label>
+                        <textarea id="learningObjectives" rows="3" placeholder="例如：&#10;1. 掌握pandas数据清洗的核心方法&#10;2. 能够独立完成数据质量评估报告&#10;3. 培养团队协作与项目管理能力"></textarea>
+                    </div>
+
+                    <h2>配置选项</h2>
+
+                    <div class="form-group">
+                        <label for="provider">API 服务商 <span class="badge">请选择您要使用的大模型服务商</span></label>
+                        <select id="provider">
+                            <option value="deepseek" selected>DeepSeek 深度求索</option>
+                            <option value="openai">OpenAI</option>
+                            <option value="qwen">通义千问 (阿里云百炼)</option>
+                            <option value="zhipu">智谱 GLM</option>
+                            <option value="moonshot">Kimi (月之暗面)</option>
+                            <option value="doubao">豆包 (火山方舟)</option>
+                            <option value="custom">自定义 (OpenAI 兼容)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="apiKeyGroup">
+                        <label for="apiKey">API Key <span class="required">*</span> <span class="hint-text">（必须填写您自己的 API Key，仅本次请求使用，不会保存）</span></label>
+                        <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off" required>
+                    </div>
+
+                    <div class="form-group" id="baseUrlGroup" style="display: none;">
+                        <label for="baseUrl">API 地址 (Base URL)</label>
+                        <input type="text" id="baseUrl" placeholder="https://api.example.com/v1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="model">选择模型</label>
+                        <select id="model">
+                            <option value="deepseek-v4-flash">deepseek-v4-flash</option>
+                            <option value="deepseek-chat">deepseek-chat</option>
+                            <option value="deepseek-reasoner">deepseek-reasoner</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="temperature">创造性 (temperature): <span id="tempValue">0.7</span></label>
+                        <input type="range" id="temperature" min="0" max="1.5" step="0.1" value="0.7">
+                    </div>
+
+                    <h2>选择要生成的教学资源</h2>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-item">
+                            <input type="checkbox" value="项目设计文档" checked>
+                            <span>项目设计文档</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" value="学习指导材料" checked>
+                            <span>学习指导材料</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" value="探究支持工具">
+                            <span>探究支持工具</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" value="协作工具">
+                            <span>协作工具</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" value="脚手架材料">
+                            <span>脚手架材料</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" value="评价工具">
+                            <span>评价工具</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" value="成果展示模板">
+                            <span>成果展示模板</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" value="教师指南">
+                            <span>教师指南</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-primary">生成教学资源</button>
+                </form>
+            </section>
+
+            <section class="result-section">
+                <h2>生成结果</h2>
+                <div id="progressArea" class="progress-area" style="display: none;">
+                    <div class="progress-info">
+                        <span id="progressText">准备生成...</span>
+                        <span id="progressCount">0/0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                </div>
+                <div id="resultContent" class="result-content">
+                    <div class="empty-state">
+                        <p>填写课程信息并点击生成按钮</p>
+                        <p class="hint">AI将为您生成专业的PBL教学资源</p>
+                    </div>
+                </div>
+                <div id="tabsContainer" class="tabs-container" style="display: none;">
+                    <div class="tabs-header" id="tabsHeader"></div>
+                    <div class="tabs-content" id="tabsContent"></div>
+                </div>
+                <button id="downloadAllBtn" class="btn-secondary" style="display: none;">下载全部资源</button>
+            </section>
+        </main>
+
+        <footer>
+            <p>© 2026 PBL教学资源生成器 | 基于DeepSeek AI | 面向高职本科数据科学类专业</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
